@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <section class="wrap">
+            <h1>Currency Converter</h1>
+            <div class="inner-wrap">
+                <form method="post">
+                    <div class=".inner-wrap">
+                        {#{{ form_widget(form.amount, { 'attr':{'id': 'amount_form'} }) }}#}
+                        {#{{ form_widget(form.currencyFrom, { 'attr':{'id': 'amount_form'} }) }}#}
+                        {#{{ form_widget(form.currencyTo, { 'attr':{'id': 'amount_form'} }) }}#}
+                        <input type="number" name="amount" value="Amount">
+                        <select name="currFrom">
+                            {% for rate in rates %}
+                                <option value="{{ rate.getRateName }}">{{ rate.getRateName }}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="currTo">
+                            {% for rate in rates %}
+                                <option value="{{ rate.getRateName }}">{{ rate.getRateName }}</option>
+                            {% endfor %}
+                        </select>
+                        <input class="submit" type="submit" name="submit" value="CONVERT">
+                    </div>
+                </form>
+                <div class="result">
+                {% if result is not empty %}
+                    {{ result }}
+                {% endif %}
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}
