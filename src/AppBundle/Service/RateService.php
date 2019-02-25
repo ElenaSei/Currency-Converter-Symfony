@@ -57,7 +57,7 @@ class RateService implements RateServiceInterface
     {
         //base EUR
         //get desire currency-EUR exchange rate
-        $currFromE = 1 /  $rateFrom->getRateExchange();
+        $currFromE = 1 / $rateFrom->getRateExchange();
         $currToE = 1 / $rateTo->getRateExchange();
 
         //get exchange rate between two currencies
@@ -67,8 +67,7 @@ class RateService implements RateServiceInterface
         $result = $exchangeRate * $amount;
 
         //round to 4 digit
-        $result = number_format($result, 4, '.', '.');
-        $result = $result . ' ' . $rateTo->getRateName();
+        $result = sprintf('%.4f', $result);
 
         return $result;
     }
@@ -84,7 +83,7 @@ class RateService implements RateServiceInterface
 
         $top5Rates = $this->getTop5Rates();
 
-        $rates = $rates =$this->createArrayOfRates($response, $top5Rates);
+        $rates = $rates = $this->createArrayOfRates($response, $top5Rates);
 
         return $rates;
     }
@@ -94,7 +93,7 @@ class RateService implements RateServiceInterface
      */
     public function getTop5Rates(): array
     {
-        $response = Unirest\Request::get(self::URL . $this->date->format('Y-m-d') . self::ACCESS_KEY . join(',',self::TOP_5_RATES))
+        $response = Unirest\Request::get(self::URL . $this->date->format('Y-m-d') . self::ACCESS_KEY . join(',', self::TOP_5_RATES))
             ->body
             ->rates;
 
@@ -108,15 +107,16 @@ class RateService implements RateServiceInterface
      * @param null $rates
      * @return array|Rate
      */
-    private function createArrayOfRates($response, $rates = null): array{
+    private function createArrayOfRates($response, $rates = null): array
+    {
 
-        foreach ($response as $key => $value){
-            if ($rates === null){
+        foreach ($response as $key => $value) {
+            if ($rates === null) {
                 $rate = new Rate();
                 $rate->setRateName($key);
                 $rate->setRateExchange($value);
                 $rates[$rate->getRateName()] = $rate;
-            }else if (!in_array($key, $rates)){
+            } else if (!in_array($key, $rates)) {
                 $rate = new Rate();
                 $rate->setRateName($key);
                 $rate->setRateExchange($value);
@@ -128,11 +128,37 @@ class RateService implements RateServiceInterface
     }
 
     /**
-     * @param array $top5rates|Rate
      * @return array
      */
-    public function getExchangeRatesBetweenTop5(array $top5rates): array
+    public function getExchangeRatesBetweenTop5(): array
     {
 
+        $top5rates = $this->getTop5Rates();
+
+        /**
+         * @var Rate $key
+         */
+        foreach ($top5rates as $key) {
+            $rateFrom = $key;
+
+            /**
+             * @var Rate $kvp
+             */
+            // every Rate gets an array of other rates, including itself, with exchange rate between it and them
+            foreach ($top5rates as $kvp) {
+
+                //make new instance because of reference types!
+                $rateTo = new Rate();
+                $rateTo->setRateName($kvp->getRateName());
+                $rateTo->setRateExchange($kvp->getRateExchange());
+
+                $result = $this->getConvertedResult($rateFrom, $rateTo, 1);
+
+                $rateTo->setRateExchange($result);
+
+                $key->addRate($rateTo);
+            }
+        }
+        return $top5rates;
     }
 }

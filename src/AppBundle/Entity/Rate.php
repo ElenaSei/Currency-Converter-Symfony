@@ -98,17 +98,17 @@ class Rate
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getRateExchange(): float
+    public function getRateExchange()
     {
         return $this->rateExchange;
     }
 
     /**
-     * @param float $rateExchange
+     * @param string $rateExchange
      */
-    public function setRateExchange(float $rateExchange): void
+    public function setRateExchange(string $rateExchange): void
     {
         $this->rateExchange = $rateExchange;
     }

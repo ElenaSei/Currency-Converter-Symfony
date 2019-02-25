@@ -21,5 +21,5 @@ interface RateServiceInterface
 
     public function getTop5Rates(): array;
 
-    public function getExchangeRatesBetweenTop5(array $top5rates): array;
+    public function getExchangeRatesBetweenTop5(): array;
 }

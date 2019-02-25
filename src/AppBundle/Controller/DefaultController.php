@@ -29,6 +29,9 @@ class DefaultController extends Controller
     {
         $allRates =  $this->rateService->getAllRates();
 
+        //make independent action for this!
+        $top5rates = $this->rateService->getExchangeRatesBetweenTop5();
+
         $result = '';
         if ($request->isMethod('POST')){
 
@@ -40,17 +43,21 @@ class DefaultController extends Controller
             $rateTo = $this->rateService->getRate($currTo);
 
             $result = $this->rateService->getConvertedResult($rateFrom, $rateTo, $amount);
+            $result = $result . ' ' . $rateTo->getRateName();
 
             return $this->render('default/index.html.twig',
                 ['result' => $result,
-                    'rates' => $allRates]);
+                    'rates' => $allRates,
+                    'top5rates' => $top5rates]);
         }
 
-        return $this->render('default/index.html.twig', ['result' => $result, 'rates' => $allRates]);
+        return $this->render('default/index.html.twig',
+            ['result' => $result,
+                'rates' => $allRates,
+                'top5rates' => $top5rates]);
     }
 
     public function topRatesAction(){
-        $top5Rates = $this->rateService->getTop5Rates();
-        $this->rateService->getExchangeRatesBetweenTop5($top5Rates);
+
     }
 }
