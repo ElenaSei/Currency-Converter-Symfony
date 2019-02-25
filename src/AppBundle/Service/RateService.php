@@ -48,17 +48,14 @@ class RateService implements RateServiceInterface
     }
 
     /**
-     * @param string $rateFrom
-     * @param string $rateTo
+     * @param Rate $rateFrom
+     * @param Rate $rateTo
      * @param float $amount
      * @return null|string
      */
-    public function getConvertedResult(string $rateFrom, string $rateTo, float $amount): ?string
+    public function getConvertedResult(Rate $rateFrom, Rate $rateTo, float $amount): ?string
     {
-        $rateFrom = $this->getRate($rateFrom);
-        $rateTo = $this->getRate($rateTo);
-
-        //formula - base EUR
+        //base EUR
         //get desire currency-EUR exchange rate
         $currFromE = 1 /  $rateFrom->getRateExchange();
         $currToE = 1 / $rateTo->getRateExchange();
@@ -74,7 +71,6 @@ class RateService implements RateServiceInterface
         $result = $result . ' ' . $rateTo->getRateName();
 
         return $result;
-
     }
 
     /**
@@ -102,7 +98,7 @@ class RateService implements RateServiceInterface
             ->body
             ->rates;
 
-        $rates =$this->createArrayOfRates($response);
+        $rates = $this->createArrayOfRates($response);
 
         return $rates;
     }
@@ -129,5 +125,14 @@ class RateService implements RateServiceInterface
         }
 
         return $rates;
+    }
+
+    /**
+     * @param array $top5rates|Rate
+     * @return array
+     */
+    public function getExchangeRatesBetweenTop5(array $top5rates): array
+    {
+
     }
 }

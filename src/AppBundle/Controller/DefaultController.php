@@ -36,7 +36,10 @@ class DefaultController extends Controller
             $currFrom = $request->request->get('currFrom');
             $currTo = $request->request->get('currTo');
 
-            $result = $this->rateService->getConvertedResult($currFrom, $currTo, $amount);
+            $rateFrom = $this->rateService->getRate($currFrom);
+            $rateTo = $this->rateService->getRate($currTo);
+
+            $result = $this->rateService->getConvertedResult($rateFrom, $rateTo, $amount);
 
             return $this->render('default/index.html.twig',
                 ['result' => $result,
@@ -48,5 +51,6 @@ class DefaultController extends Controller
 
     public function topRatesAction(){
         $top5Rates = $this->rateService->getTop5Rates();
+        $this->rateService->getExchangeRatesBetweenTop5($top5Rates);
     }
 }

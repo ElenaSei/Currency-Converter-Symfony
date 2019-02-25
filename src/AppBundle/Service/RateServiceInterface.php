@@ -10,16 +10,16 @@ namespace AppBundle\Service;
 
 
 use AppBundle\Entity\Rate;
-use Doctrine\Common\Collections\ArrayCollection;
 
 interface RateServiceInterface
 {
     public function getRate(string $rate): ?Rate;
 
-    public function getConvertedResult(string $rateFrom, string $rateTo, float $amount): ?string;
+    public function getConvertedResult(Rate $rateFrom, Rate $rateTo, float $amount): ?string;
 
-    public function getAllRates(): array ;
+    public function getAllRates(): array;
 
-    public function getTop5Rates(): array ;
+    public function getTop5Rates(): array;
 
+    public function getExchangeRatesBetweenTop5(array $top5rates): array;
 }

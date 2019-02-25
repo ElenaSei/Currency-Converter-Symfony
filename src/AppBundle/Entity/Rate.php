@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,6 +29,40 @@ class Rate
      * @var float
      */
     private $rateExchange;
+
+    /**
+     * @var ArrayCollection|Rate
+     */
+    private $rates;
+
+    /**
+     * Rate constructor.
+     */
+    public function __construct()
+    {
+        $this->rates = new ArrayCollection();
+    }
+
+    /**
+     * @return Rate|ArrayCollection
+     */
+    public function getRates()
+    {
+        return $this->rates;
+    }
+
+    /**
+     * @param Rate $rate
+     * @return Rate
+     */
+    public function addRate(Rate $rate)
+    {
+        $this->rates[] = $rate;
+
+        return $this;
+    }
+
+
 
     /**
      * Get id.
