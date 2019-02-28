@@ -19,7 +19,11 @@ interface RateServiceInterface
 
     public function getAllRates(): array;
 
-    public function getTop5Rates(): array;
+    public function getTopRates(): array;
 
     public function getExchangeRatesBetweenTop5(): array;
+
+    public function insert(Rate $rate): bool;
+
+    public function findOneByName(string $name);
 }

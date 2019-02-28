@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Rate
  *
- * @ORM\Table(name="rate")
+ * @ORM\Table(name="rates")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\RateRepository")
  */
 class Rate
@@ -16,19 +16,27 @@ class Rate
     /**
      * @var int
      *
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     *
      */
     private $id;
 
     /**
      * @var string
      *
+     * @ORM\Column(type="string", length=255)
+     *
      */
     private $rateName;
 
     /**
-     * @var float
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ExchangeRate", mappedBy="rate")
      */
-    private $rateExchange;
+    private $exchangeRates;
 
     /**
      * @var ArrayCollection|Rate
@@ -41,6 +49,7 @@ class Rate
     public function __construct()
     {
         $this->rates = new ArrayCollection();
+        $this->exchangeRates = new ArrayCollection();
     }
 
     /**
@@ -61,8 +70,6 @@ class Rate
 
         return $this;
     }
-
-
 
     /**
      * Get id.
@@ -98,19 +105,22 @@ class Rate
     }
 
     /**
-     * @return string
+     * @return ArrayCollection
      */
-    public function getRateExchange()
+    public function getExchangeRates()
     {
-        return $this->rateExchange;
+        return $this->exchangeRates;
     }
 
     /**
-     * @param string $rateExchange
+     * @param ExchangeRate $exchangeRate
+     * @return Rate
      */
-    public function setRateExchange(string $rateExchange): void
+    public function addExchangeRate(ExchangeRate $exchangeRate)
     {
-        $this->rateExchange = $rateExchange;
+        $this->exchangeRates[] = $exchangeRate;
+
+        return $this;
     }
 
 

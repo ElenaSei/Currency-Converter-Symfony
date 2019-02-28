@@ -9,26 +9,31 @@
 namespace AppBundle\Service;
 
 
+use AppBundle\Entity\ExchangeRate;
 use AppBundle\Entity\Rate;
+use AppBundle\Repository\RateRepository;
 use Unirest;
 
 class RateService implements RateServiceInterface
 {
     const URL = 'http://data.fixer.io/api/';
     const ACCESS_KEY = '?access_key=078016de6f923b25d70e29433fd224e3&symbols=';
-    const TOP_5_RATES = ['EUR', 'USD', 'GBP', 'BGN', 'AUD'];
+    const TOP_RATES = ['EUR', 'USD', 'GBP', 'BGN', 'AUD'];
 
     /**
      * @var \DateTime
      */
     private $date;
+    private $rateRepository;
 
     /**
      * RateService constructor.
+     * @param RateRepository $rateRepository
      */
-    public function __construct()
+    public function __construct(RateRepository $rateRepository)
     {
         $this->date = new \DateTime('now');
+        $this->rateRepository = $rateRepository;
 
     }
 
@@ -38,11 +43,10 @@ class RateService implements RateServiceInterface
      */
     public function getRate(string $rateName): ?Rate
     {
-        $response = Unirest\Request::get(self::URL . $this->date->format('Y-m-d') . self::ACCESS_KEY . $rateName);
-
-        $rate = new Rate();
-        $rate->setRateName($rateName);
-        $rate->setRateExchange($response->body->rates->$rateName);
+        /**
+         * @var Rate $rate
+         */
+        $rate = $this->rateRepository->findOneBy(['rateName' => $rateName]);
 
         return $rate;
     }
@@ -57,8 +61,14 @@ class RateService implements RateServiceInterface
     {
         //base EUR
         //get desire currency-EUR exchange rate
-        $currFromE = 1 / $rateFrom->getRateExchange();
-        $currToE = 1 / $rateTo->getRateExchange();
+        $currFromE = 1 / $rateFrom->getExchangeRates()->last()->getExchange();
+        $currToE = 1 / $rateTo->getExchangeRates()->last()->getExchange();
+
+//        dump($rateFrom);
+//        dump($rateTo);
+//        dump($rateFrom->getExchangeRates()->last()->getExchange());
+//        dump($rateTo->getExchangeRates()->last()->getExchange());
+//        exit;
 
         //get exchange rate between two currencies
         $exchangeRate = $currFromE / $currToE;
@@ -77,52 +87,20 @@ class RateService implements RateServiceInterface
      */
     public function getAllRates(): array
     {
-        $response = Unirest\Request::get(self::URL . $this->date->format('Y-m-d') . self::ACCESS_KEY)
-            ->body
-            ->rates;
+        $topRates = $this->getTopRates();
+        $allRatesWithoutTopRates = $this->rateRepository->getAllRatesWithoutTopRates( self::TOP_RATES);
 
-        $top5Rates = $this->getTop5Rates();
+        $allRates = array_merge($topRates, $allRatesWithoutTopRates);
 
-        $rates = $rates = $this->createArrayOfRates($response, $top5Rates);
-
-        return $rates;
+        return $allRates;
     }
 
     /**
      * @return array|Rate
      */
-    public function getTop5Rates(): array
+    public function getTopRates(): array
     {
-        $response = Unirest\Request::get(self::URL . $this->date->format('Y-m-d') . self::ACCESS_KEY . join(',', self::TOP_5_RATES))
-            ->body
-            ->rates;
-
-        $rates = $this->createArrayOfRates($response);
-
-        return $rates;
-    }
-
-    /**
-     * @param $response
-     * @param null $rates
-     * @return array|Rate
-     */
-    private function createArrayOfRates($response, $rates = null): array
-    {
-
-        foreach ($response as $key => $value) {
-            if ($rates === null) {
-                $rate = new Rate();
-                $rate->setRateName($key);
-                $rate->setRateExchange($value);
-                $rates[$rate->getRateName()] = $rate;
-            } else if (!in_array($key, $rates)) {
-                $rate = new Rate();
-                $rate->setRateName($key);
-                $rate->setRateExchange($value);
-                $rates[$rate->getRateName()] = $rate;
-            }
-        }
+        $rates = $this->rateRepository->getTopRates(self::TOP_RATES);
 
         return $rates;
     }
@@ -133,32 +111,52 @@ class RateService implements RateServiceInterface
     public function getExchangeRatesBetweenTop5(): array
     {
 
-        $top5rates = $this->getTop5Rates();
+        $topRates = $this->getTopRates();
 
         /**
          * @var Rate $key
          */
-        foreach ($top5rates as $key) {
+        foreach ($topRates as $key) {
             $rateFrom = $key;
 
             /**
              * @var Rate $kvp
              */
             // every Rate gets an array of other rates, including itself, with exchange rate between it and them
-            foreach ($top5rates as $kvp) {
+            foreach ($topRates as $kvp) {
 
                 //make new instance because of reference types!
                 $rateTo = new Rate();
                 $rateTo->setRateName($kvp->getRateName());
-                $rateTo->setRateExchange($kvp->getRateExchange());
+
+                //get only today exchange rate
+                $lastExchangeRate = $kvp->getExchangeRates()->last();
+
+                //make new instance because of reference types!
+                $exchangeRate = new ExchangeRate();
+                $exchangeRate->setDate($lastExchangeRate->getDate());
+                $exchangeRate->setRate($rateTo);
+                $exchangeRate->setExchange($lastExchangeRate->getExchange());
+                
+                $rateTo->addExchangeRate($exchangeRate);
 
                 $result = $this->getConvertedResult($rateFrom, $rateTo, 1);
-
-                $rateTo->setRateExchange($result);
+                $exchangeRate->setExchange($result);
 
                 $key->addRate($rateTo);
             }
         }
-        return $top5rates;
+        return $topRates;
+    }
+
+    public function insert(Rate $rate): bool
+    {
+        return $this->rateRepository->insert($rate);
+
+    }
+
+    public function findOneByName(string $name)
+    {
+        return $this->rateRepository->findOneBy(['rateName' => $name]);
     }
 }
