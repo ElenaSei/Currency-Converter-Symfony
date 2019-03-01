@@ -1,0 +1,18 @@
+<div class="table-wrap">
+    <table>
+        <tr>
+            <th></th>
+            {% for rate in topRates %}
+            <th>{{ rate.getRateName }}</th>
+            {% endfor %}
+        </tr>
+        {% for rate in topRates %}
+        <tr>
+            <th>{{ rate.getRateName }}</th>
+            {% for innerRate in rate.getRates %}
+            <td>{{ (innerRate.getExchangeRates|last).getExchange }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+</div>

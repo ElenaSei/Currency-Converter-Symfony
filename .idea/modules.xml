@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Currency-Converter-Symfony.iml" filepath="$PROJECT_DIR$/.idea/Currency-Converter-Symfony.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Currency-Converter-Flex.iml" filepath="$PROJECT_DIR$/.idea/Currency-Converter-Flex.iml" />
     </modules>
   </component>
 </project>
