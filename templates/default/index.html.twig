@@ -10,7 +10,7 @@
                         {#{{ form_widget(form.amount, { 'attr':{'id': 'amount_form'} }) }}#}
                         {#{{ form_widget(form.currencyFrom, { 'attr':{'id': 'amount_form'} }) }}#}
                         {#{{ form_widget(form.currencyTo, { 'attr':{'id': 'amount_form'} }) }}#}
-                        <input type="number" step="0.01" name="amount" value="Amount" placeholder="1">
+                        <input type="number" step="0.01" name="amount" value="Amount">
                         <select name="currFrom">
                             {% for rate in rates %}
                                 <option value="{{ rate.getRateName }}">{{ rate.getRateName }}</option>
