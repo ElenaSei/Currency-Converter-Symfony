@@ -6,7 +6,7 @@
             <h1>Currency Converter</h1>
             <div class="input-wrap">
                 <div class="inner-wrap">
-                    <form method="post">
+                    <form id="form_data" method="post">
                         {#{{ form_widget(form.amount, { 'attr':{'id': 'amount_form'} }) }}#}
                         {#{{ form_widget(form.currencyFrom, { 'attr':{'id': 'amount_form'} }) }}#}
                         {#{{ form_widget(form.currencyTo, { 'attr':{'id': 'amount_form'} }) }}#}
@@ -23,7 +23,7 @@
                         </select>
                         <input class="submit" type="submit" name="submit" value="CONVERT">
                     </form>
-                    <div class="result">
+                    <div id="result" class="result">
                         {% if result is not empty %}
                             {{ result }}
                         {% endif %}

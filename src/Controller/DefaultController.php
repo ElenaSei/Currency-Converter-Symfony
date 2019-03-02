@@ -5,8 +5,12 @@ namespace App\Controller;
 use App\Service\ApiServiceInterface;
 use App\Service\RateServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class DefaultController extends Controller
 {
@@ -25,7 +29,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/", name="homepage", options={"expose"=true})
+     * @Route("/", name="homepage", methods={"GET", "POST"}, options={"expose"=true})
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -39,21 +43,38 @@ class DefaultController extends Controller
         $result = '';
         if ($request->isMethod('POST')){
 
-            $amount = $request->request->get('amount');
-            $currFrom = $request->request->get('currFrom');
-            $currTo = $request->request->get('currTo');
+            if ($request->isXmlHttpRequest()) {
+                $amount = $request->request->get('amount');
+                $currFrom = $request->request->get('currFrom');
+                $currTo = $request->request->get('currTo');
 
-            $rateFrom = $this->rateService->getRate($currFrom);
-            $rateTo = $this->rateService->getRate($currTo);
+                $rateFrom = $this->rateService->getRate($currFrom);
+                $rateTo = $this->rateService->getRate($currTo);
 
-            $result = $this->rateService->getConvertedResult($rateFrom, $rateTo, $amount);
+                if ($rateTo !== null && $rateFrom !== null) {
+                    $result = $this->rateService->getConvertedResult($rateFrom, $rateTo, $amount);
+                }
 
+                if ($result !== null) {
+                    $result = $result . ' ' . $rateTo->getRateName();
 
-            $result = $result . ' ' . $rateTo->getRateName();
+                    $encoders = [
+                        new JsonEncode()
+                    ];
+                    $normalizers = [
+                        new ObjectNormalizer()
+                    ];
+                    $serializer = new Serializer($normalizers, $encoders);
+                    $data = $serializer->serialize($result, 'json');
 
-            return $this->render('default/index.html.twig',
-                ['result' => $result,
-                    'rates' => $allRates]);
+                    return new JsonResponse($data, 200, [], true);
+                } else {
+                    return new JsonResponse([
+                        'type' => 'error',
+                        'message' => 'AJAX only'
+                    ]);
+                }
+            }
         }
 
         return $this->render('default/index.html.twig',
