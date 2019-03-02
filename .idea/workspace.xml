@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e0f88205-ac7a-4434-bf8a-792c0d5cbf59" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Procfile" beforeDir="false" afterPath="$PROJECT_DIR$/Procfile" afterDir="false" />
-    </list>
+    <list default="true" id="e0f88205-ac7a-4434-bf8a-792c0d5cbf59" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -220,11 +218,12 @@
       <path value="$PROJECT_DIR$/vendor/symfony/serializer" />
       <path value="$PROJECT_DIR$/vendor/symfony/property-access" />
       <path value="$PROJECT_DIR$/vendor/symfony/inflector" />
+      <path value="$PROJECT_DIR$/vendor/symfony/apache-pack" />
     </include_path>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="16" />
-    <option name="y" value="205" />
+    <option name="x" value="225" />
+    <option name="y" value="23" />
     <option name="width" value="1144" />
     <option name="height" value="972" />
   </component>
@@ -242,6 +241,11 @@
             <path>
               <item name="Currency-Converter-Symfony" type="b2602c69:ProjectViewProjectNode" />
               <item name="Currency-Converter-Symfony" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Currency-Converter-Symfony" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Currency-Converter-Symfony" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -290,12 +294,12 @@
       <option name="presentableId" value="Default" />
       <updated>1551438999387</updated>
       <workItem from="1551439000465" duration="8156000" />
-      <workItem from="1551455779809" duration="6185000" />
+      <workItem from="1551455779809" duration="6321000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14758000" />
+    <option name="totallyTimeSpent" value="14894000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -307,9 +311,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="16" y="205" width="1144" height="972" extended-state="0" />
+    <frame x="225" y="23" width="1144" height="972" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2631579" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2631579" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
@@ -318,7 +322,7 @@
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.32914287" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.32914287" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />

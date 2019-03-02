@@ -10,6 +10,7 @@
         "friendsofsymfony/jsrouting-bundle": "^2.3",
         "incenteev/composer-parameter-handler": "^2.0",
         "mashape/unirest-php": "^3.0",
+        "symfony/apache-pack": "^1.0",
         "symfony/asset": "4.2.*",
         "symfony/console": "4.2.*",
         "symfony/dotenv": "4.2.*",
