@@ -36,7 +36,7 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         //make an independent action for this and do it once per day
-        //$this->apiService->insertAllRates();
+        $this->apiService->insertAllRates();
 
         $allRates =  $this->rateService->getAllRates();
 
