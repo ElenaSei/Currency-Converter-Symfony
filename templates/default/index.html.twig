@@ -6,31 +6,31 @@
             <h1>Currency Converter</h1>
             <div class="input-wrap">
                 <div class="inner-wrap">
-                    <form id="form_data" method="post">
+                    {#<form id="form_data" method="post">#}
                         {#{{ form_widget(form.amount, { 'attr':{'id': 'amount_form'} }) }}#}
                         {#{{ form_widget(form.currencyFrom, { 'attr':{'id': 'amount_form'} }) }}#}
                         {#{{ form_widget(form.currencyTo, { 'attr':{'id': 'amount_form'} }) }}#}
-                        <input type="number" step="0.01" name="amount" value="Amount">
-                        <select name="currFrom">
-                            {% for rate in rates %}
-                                <option value="{{ rate.getRateName }}">{{ rate.getRateName }}</option>
-                            {% endfor %}
-                        </select>
-                        <select name="currTo">
-                            {% for rate in rates %}
-                                <option value="{{ rate.getRateName }}">{{ rate.getRateName }}</option>
-                            {% endfor %}
-                        </select>
-                        <input class="submit" type="submit" name="submit" value="CONVERT">
-                    </form>
-                    <div id="result" class="result">
-                        {% if result is not empty %}
-                            {{ result }}
-                        {% endif %}
-                    </div>
+                        {#<input type="number" step="0.01" name="amount" value="Amount">#}
+                        {#<select name="currFrom">#}
+                            {#{% for rate in rates %}#}
+                                {#<option value="{{ rate.getRateName }}">{{ rate.getRateName }}</option>#}
+                            {#{% endfor %}#}
+                        {#</select>#}
+                        {#<select name="currTo">#}
+                            {#{% for rate in rates %}#}
+                                {#<option value="{{ rate.getRateName }}">{{ rate.getRateName }}</option>#}
+                            {#{% endfor %}#}
+                        {#</select>#}
+                        {#<input class="submit" type="submit" name="submit" value="CONVERT">#}
+                    {#</form>#}
+                    {#<div id="result" class="result">#}
+                        {#{% if result is not empty %}#}
+                            {#{{ result }}#}
+                        {#{% endif %}#}
+                    {#</div>#}
                 </div>
             </div>
-            {{ render(controller('App\\Controller\\DefaultController:topRatesAction')) }}
+            {#{{ render(controller('App\\Controller\\DefaultController:topRatesAction')) }}#}
         </section>
     </div>
 {% endblock %}

@@ -36,50 +36,48 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         //make an independent action for this and do it once per day
-        $this->apiService->insertAllRates();
+//        $this->apiService->insertAllRates();
+//
+//        $allRates =  $this->rateService->getAllRates();
+//
+//        $result = '';
+//        if ($request->isMethod('POST')){
+//
+//            if ($request->isXmlHttpRequest()) {
+//                $amount = $request->request->get('amount');
+//                $currFrom = $request->request->get('currFrom');
+//                $currTo = $request->request->get('currTo');
+//
+//                $rateFrom = $this->rateService->getRate($currFrom);
+//                $rateTo = $this->rateService->getRate($currTo);
+//
+//                if ($rateTo !== null && $rateFrom !== null) {
+//                    $result = $this->rateService->getConvertedResult($rateFrom, $rateTo, $amount);
+//                }
+//
+//                if ($result !== null) {
+//                    $result = $result . ' ' . $rateTo->getRateName();
+//
+//                    $encoders = [
+//                        new JsonEncode()
+//                    ];
+//                    $normalizers = [
+//                        new ObjectNormalizer()
+//                    ];
+//                    $serializer = new Serializer($normalizers, $encoders);
+//                    $data = $serializer->serialize($result, 'json');
+//
+//                    return new JsonResponse($data, 200, [], true);
+//                } else {
+//                    return new JsonResponse([
+//                        'type' => 'error',
+//                        'message' => 'AJAX only'
+//                    ]);
+//                }
+//            }
+//        }
 
-        $allRates =  $this->rateService->getAllRates();
-
-        $result = '';
-        if ($request->isMethod('POST')){
-
-            if ($request->isXmlHttpRequest()) {
-                $amount = $request->request->get('amount');
-                $currFrom = $request->request->get('currFrom');
-                $currTo = $request->request->get('currTo');
-
-                $rateFrom = $this->rateService->getRate($currFrom);
-                $rateTo = $this->rateService->getRate($currTo);
-
-                if ($rateTo !== null && $rateFrom !== null) {
-                    $result = $this->rateService->getConvertedResult($rateFrom, $rateTo, $amount);
-                }
-
-                if ($result !== null) {
-                    $result = $result . ' ' . $rateTo->getRateName();
-
-                    $encoders = [
-                        new JsonEncode()
-                    ];
-                    $normalizers = [
-                        new ObjectNormalizer()
-                    ];
-                    $serializer = new Serializer($normalizers, $encoders);
-                    $data = $serializer->serialize($result, 'json');
-
-                    return new JsonResponse($data, 200, [], true);
-                } else {
-                    return new JsonResponse([
-                        'type' => 'error',
-                        'message' => 'AJAX only'
-                    ]);
-                }
-            }
-        }
-
-        return $this->render('default/index.html.twig',
-            ['result' => $result,
-                'rates' => $allRates]);
+        return $this->render('default/index.html.twig');
     }
 
     /**
